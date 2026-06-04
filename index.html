@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Digital Image Processing - Interactive Laboratory</title>
+  <meta name="description"
+    content="Tugas Praktikum Pengolahan Citra Digital oleh Naufal Madani, NIM 241011128, Ilmu Komputer Semester 4, ITH." />
+  <link rel="icon" href="logo.ico" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <header>
+    <div class="container">
+      <div class="header-badge">Tugas Praktikum Pengolahan Citra Digital</div>
+      <h1>Digital Image Processing<br>Interactive Laboratory</h1>
+      <p class="header-subtitle">Implementasi Pengolahan Citra Berbasis Web menggunakan JavaScript</p>
+
+      <div class="group-info">
+        <div class="group-info-item">
+          <span class="group-info-label">Program Studi</span>
+          <span class="group-info-value">Ilmu Komputer — Semester 4</span>
+        </div>
+        <div class="group-info-divider"></div>
+        <div class="group-info-item">
+          <span class="group-info-label">Kampus</span>
+          <span class="group-info-value">Institut Teknologi Bacharuddin Jusuf Habibie (ITH)</span>
+        </div>
+        <div class="group-info-divider"></div>
+        <div class="group-info-item">
+          <span class="group-info-label">Mata Kuliah</span>
+          <span class="group-info-value">Pengolahan Citra Digital</span>
+        </div>
+      </div>
+
+      <div class="member-grid">
+
+        <div class="member-card">
+          <div class="member-avatar-wrap">
+            <img src="img/arkan.jpeg" alt="Foto Muhammad Arkan Naim" class="member-avatar" />
+            <div class="member-avatar-ring"></div>
+          </div>
+          <div class="member-info">
+            <span class="member-name">Muhammad Arkan Naim</span>
+            <span class="member-nim">NIM 241011123</span>
+          </div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-avatar-wrap">
+            <img src="img/akmal.jpeg" alt="Foto Muhammad Akmal Ahsan" class="member-avatar" />
+            <div class="member-avatar-ring"></div>
+          </div>
+          <div class="member-info">
+            <span class="member-name">Muhammad Akmal Ahsan</span>
+            <span class="member-nim">NIM 241011124</span>
+          </div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-avatar-wrap">
+            <img src="img/syahrul.jpeg" alt="Foto Syahrul Ramadhan" class="member-avatar" />
+            <div class="member-avatar-ring"></div>
+          </div>
+          <div class="member-info">
+            <span class="member-name">Syahrul Ramadhan</span>
+            <span class="member-nim">NIM 241011125</span>
+          </div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-avatar-wrap">
+            <img src="img/fatih.jpeg" alt="Foto Muhammad Alfatih Syaefuddin" class="member-avatar" />
+            <div class="member-avatar-ring"></div>
+          </div>
+          <div class="member-info">
+            <span class="member-name">Muhammad Alfatih Syaefuddin</span>
+            <span class="member-nim">NIM 241011126</span>
+          </div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-avatar-wrap">
+            <img src="img/naufal.jpeg" alt="Foto Andi Ahmad Naufal Madani" class="member-avatar" />
+            <div class="member-avatar-ring"></div>
+          </div>
+          <div class="member-info">
+            <span class="member-name">Andi Ahmad Naufal Madani</span>
+            <span class="member-nim">NIM 241011128</span>
+          </div>
+        </div>
+
+        <div class="member-card">
+          <div class="member-avatar-wrap">
+            <img src="img/dzul.jpeg" alt="Dzul" class="member-avatar" />
+            <div class="member-avatar-ring"></div>
+          </div>
+          <div class="member-info">
+            <span class="member-name">Dzul Kifly Rustam</span>
+            <span class="member-nim">NIM 241011065</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <section class="section" id="sec-upload">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-icon icon-blue">📂</div>
+            <div class="section-title-group">
+              <h2>Input Gambar</h2>
+              <p>Upload gambar untuk memulai seluruh proses pengolahan citra</p>
+            </div>
+            <span class="poin-badge">Metode 1</span>
+          </div>
+
+          <div class="upload-zone" id="upload-zone">
+            <input type="file" id="file-input" accept="image/*" />
+            <div class="upload-icon">🖼️</div>
+            <h3>Klik atau Drag &amp; Drop Gambar</h3>
+            <p>Mendukung format JPG, PNG, WebP, BMP, GIF</p>
+          </div>
+
+          <div id="original-display" class="hidden" style="margin-top:20px;">
+            <div class="row-two">
+              <div>
+                <p style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:10px;">Gambar Asli
+                  (Original)</p>
+                <div class="canvas-single">
+                  <div class="canvas-label"><span class="dot"></span>Citra Input — Proporsional 300px</div>
+                  <canvas id="canvas-original"></canvas>
+                </div>
+              </div>
+              <div id="file-info"
+                style="padding:16px;background:rgba(0,0,0,0.2);border:1px solid var(--border);border-radius:var(--radius-md);font-size:13px;">
+                <p style="font-weight:700;font-size:15px;margin-bottom:12px;color:var(--text-primary);">📋 Info Gambar
+                </p>
+                <table style="width:100%;border-collapse:collapse;">
+                  <tr>
+                    <td style="color:var(--text-muted);padding:4px 0;">Nama File</td>
+                    <td id="info-name" style="color:var(--text-primary);font-family:monospace;font-size:12px;"></td>
+                  </tr>
+                  <tr>
+                    <td style="color:var(--text-muted);padding:4px 0;">Ukuran File</td>
+                    <td id="info-size" style="color:var(--text-primary);"></td>
+                  </tr>
+                  <tr>
+                    <td style="color:var(--text-muted);padding:4px 0;">Resolusi Asli</td>
+                    <td id="info-res" style="color:var(--text-primary);"></td>
+                  </tr>
+                  <tr>
+                    <td style="color:var(--text-muted);padding:4px 0;">Resolusi Display</td>
+                    <td id="info-display-res" style="color:var(--text-primary);"></td>
+                  </tr>
+                  <tr>
+                    <td style="color:var(--text-muted);padding:4px 0;">Tipe</td>
+                    <td id="info-type" style="color:var(--text-primary);"></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-gray">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-icon icon-purple">🔲</div>
+            <div class="section-title-group">
+              <h2>Konversi Grayscale</h2>
+              <p>Formula: Gray = 0.299·R + 0.587·G + 0.114·B</p>
+            </div>
+            <span class="poin-badge">Metode 2</span>
+          </div>
+          <div id="gray-placeholder" class="placeholder-msg"><span class="emoji">⬆️</span>Upload gambar terlebih dahulu
+          </div>
+          <div id="gray-content" class="hidden">
+            <div class="canvas-single">
+              <div class="canvas-label"><span class="dot"></span>Citra Grayscale</div>
+              <canvas id="canvas-gray"></canvas>
+              <div class="download-bar">
+                <span class="dl-label">Unduh hasil konversi</span>
+                <button class="download-btn" onclick="downloadCanvas('canvas-gray', 'grayscale')" id="btn-dl-gray">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  <span>Unduh PNG</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-binary">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-icon icon-cyan">⬛</div>
+            <div class="section-title-group">
+              <h2>Citra Biner (Thresholding)</h2>
+              <p>Piksel &gt; threshold → putih (255), piksel ≤ threshold → hitam (0)</p>
+            </div>
+            <span class="poin-badge">Metode 3</span>
+          </div>
+          <div id="binary-placeholder" class="placeholder-msg"><span class="emoji">⬆️</span>Upload gambar terlebih
+            dahulu</div>
+          <div id="binary-content" class="hidden">
+
+            <!-- ─── GRID SIDE-BY-SIDE: MANUAL + OTSU ─────────────────────── -->
+            <div class="binary-side-by-side">
+
+              <!-- MANUAL THRESHOLDING -->
+              <div class="binary-method-block">
+                <div class="binary-method-title">
+                  <span class="binary-method-badge badge-manual">Manual</span>
+                  <span>Atur threshold secara manual menggunakan slider</span>
+                </div>
+                <div class="control-row">
+                  <span class="control-label">🎚️ Threshold</span>
+                  <div class="slider-wrapper">
+                    <input type="range" id="slider-threshold" min="0" max="255" value="127" />
+                    <span class="slider-value" id="val-threshold">127</span>
+                  </div>
+                </div>
+                <div class="canvas-single">
+                  <div class="canvas-label"><span class="dot"></span>Citra Biner Manual — Threshold: <span
+                      id="lbl-threshold">127</span></div>
+                  <canvas id="canvas-binary"></canvas>
+                  <div class="download-bar">
+                    <span class="dl-label">Unduh hasil konversi</span>
+                    <button class="download-btn" onclick="downloadCanvas('canvas-binary', 'binary-threshold')"
+                      id="btn-dl-binary">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                      <span>Unduh PNG</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- OTSU THRESHOLDING -->
+              <div class="binary-method-block">
+                <div class="binary-method-title">
+                  <span class="binary-method-badge badge-otsu">Otsu</span>
+                  <span>Threshold optimal dihitung otomatis dari histogram gambar</span>
+                </div>
+
+                <!-- Info box Otsu -->
+                <div class="otsu-info-box">
+                  <div class="otsu-info-row">
+                    <span class="otsu-info-label">📐 Formula</span>
+                    <span class="otsu-info-value">σ²<sub>B</sub> = w<sub>B</sub> · w<sub>F</sub> · (μ<sub>B</sub> −
+                      μ<sub>F</sub>)²</span>
+                  </div>
+                  <div class="otsu-info-row">
+                    <span class="otsu-info-label">🎯 Threshold Optimal</span>
+                    <span class="otsu-info-value" id="otsu-threshold-display">—</span>
+                  </div>
+                  <div class="otsu-info-row">
+                    <span class="otsu-info-label">📊 Varian Maks (σ²<sub>B</sub>)</span>
+                    <span class="otsu-info-value" id="otsu-variance-display">—</span>
+                  </div>
+                </div>
+
+                <div class="canvas-single">
+                  <div class="canvas-label"><span class="dot" style="background:#06b6d4;"></span>Citra Biner Otsu —
+                    Threshold Otomatis: <span id="lbl-otsu-threshold">—</span></div>
+                  <canvas id="canvas-binary-otsu"></canvas>
+                  <div class="download-bar">
+                    <span class="dl-label">Unduh hasil konversi</span>
+                    <button class="download-btn" onclick="downloadCanvas('canvas-binary-otsu', 'binary-otsu-threshold')"
+                      id="btn-dl-binary-otsu">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                      <span>Unduh PNG</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /binary-side-by-side -->
+
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-arith">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-icon icon-amber">☀️</div>
+            <div class="section-title-group">
+              <h2>Operasi Aritmatika</h2>
+
+            </div>
+            <span class="poin-badge">Metode 4</span>
+          </div>
+          <div id="arith-placeholder" class="placeholder-msg"><span class="emoji">⬆️</span>Upload gambar terlebih dahulu
+          </div>
+          <div id="arith-content" class="hidden">
+
+            <!-- ── BRIGHTNESS (slider negatif–positif) ───────────────── -->
+            <div class="arith-method-block">
+              <div class="arith-method-title">
+                <span class="arith-badge badge-brightness">Brightness</span>
+                <span>Tambah / kurangi nilai piksel secara seragam</span>
+              </div>
+              <div class="control-row">
+                <span class="control-label">🔆 Beta (β)</span>
+                <div class="slider-wrapper">
+                  <input type="range" id="slider-brightness" min="-100" max="150" value="75" />
+                  <span class="slider-value" id="val-brightness">+75</span>
+                </div>
+              </div>
+              <div class="arith-formula-tag">
+                Piksel_out = clamp(Piksel_in <strong>+</strong> β, 0, 255)
+              </div>
+              <div class="canvas-single">
+                <div class="canvas-label"><span class="dot"></span>Citra Brightness Adjusted — β = <span
+                    id="lbl-brightness">+75</span></div>
+                <canvas id="canvas-arith"></canvas>
+                <div class="download-bar">
+                  <span class="dl-label">Unduh hasil konversi</span>
+                  <button class="download-btn" onclick="downloadCanvas('canvas-arith', 'brightness-adjusted')"
+                    id="btn-dl-arith">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    <span>Unduh PNG</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="arith-method-block" style="margin-top: 24px;">
+              <div class="arith-method-title">
+                <span class="arith-badge" style="background:#8b5cf6; color:white; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:700;">Contrast</span>
+                <span>Ubah kontras citra (meregangkan rentang warna dari abu-abu tengah)</span>
+              </div>
+              <div class="control-row">
+                <span class="control-label">🌓 Faktor Kontras</span>
+                <div class="slider-wrapper">
+                  <input type="range" id="slider-contrast" min="-100" max="100" value="0" />
+                  <span class="slider-value" id="val-contrast">0</span>
+                </div>
+              </div>
+              <div class="arith-formula-tag">
+                P_out = clamp(Faktor × (P_in - 128) + 128, 0, 255)
+              </div>
+              <div class="canvas-single">
+                <div class="canvas-label"><span class="dot"></span>Citra Contrast Adjusted — C = <span id="lbl-contrast">0</span></div>
+                <canvas id="canvas-contrast"></canvas>
+                <div class="download-bar">
+                  <span class="dl-label">Unduh hasil konversi</span>
+                  <button class="download-btn" onclick="downloadCanvas('canvas-contrast', 'contrast-adjusted')" id="btn-dl-contrast">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    <span>Unduh PNG</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <section class="section" id="sec-logic">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-icon icon-green">🔀</div>
+            <div class="section-title-group">
+              <h2>Operasi Logika</h2>
+              <p>Bitwise AND dengan nilai konstan &amp; Citra Negatif (Bitwise NOT)</p>
+            </div>
+            <span class="poin-badge">Metode 5</span>
+          </div>
+          <div id="logic-placeholder" class="placeholder-msg"><span class="emoji">⬆️</span>Upload gambar terlebih dahulu
+          </div>
+          <div id="logic-content" class="hidden">
+            <div class="control-row">
+              <span class="control-label">⚙️ Nilai Bit</span>
+              <div class="slider-wrapper">
+                <input type="range" id="slider-bitand" min="0" max="255" value="255" />
+                <span class="slider-value" id="val-bitand">255</span>
+              </div>
+            </div>
+            <div class="canvas-grid" style="grid-template-columns:1fr 1fr;max-width:640px;">
+              <div class="canvas-item">
+                <div class="canvas-label"><span class="dot"></span>Bitwise AND (Interaktif)</div>
+                <canvas id="canvas-bitand"></canvas>
+                <div class="download-bar">
+                  <button class="download-btn" onclick="downloadCanvas('canvas-bitand', 'bitwise-and')"
+                    id="btn-dl-bitand">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    <span>Unduh PNG</span>
+                  </button>
+                </div>
+              </div>
+              <div class="canvas-item">
+                <div class="canvas-label"><span class="dot"></span>Citra Negatif (NOT)</div>
+                <canvas id="canvas-not"></canvas>
+                <div class="download-bar">
+                  <button class="download-btn" onclick="downloadCanvas('canvas-not', 'negative-not')" id="btn-dl-not">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    <span>Unduh PNG</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-histogram">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-icon icon-rose">📊</div>
+            <div class="section-title-group">
+              <p>Distribusi nilai piksel pada ruang warna RGB, Grayscale, HSV, serta Hasil Normalisasinya</p>
+            </div>
+            <span class="poin-badge">Metode 6 (Tambahan) </span>
+          </div>
+          <div id="hist-placeholder" class="placeholder-msg"><span class="emoji">⬆️</span>Upload gambar terlebih dahulu
+          </div>
+          <div id="hist-content" class="hidden">
+
+            <div class="tab-nav">
+              <button class="tab-btn active" data-tab="hist-rgb">🎨 RGB</button>
+              <button class="tab-btn" data-tab="hist-gray">🔲 Grayscale</button>
+              <button class="tab-btn" data-tab="hist-hsv">🌈 HSV Value</button>
+            </div>
+
+            <div class="tab-panel active" id="hist-rgb">
+              <div class="chart-container"><canvas id="chart-rgb"></canvas></div>
+            </div>
+            <div class="tab-panel" id="hist-gray">
+              <div class="chart-container"><canvas id="chart-gray"></canvas></div>
+            </div>
+            <div class="tab-panel" id="hist-hsv">
+              <div class="chart-container"><canvas id="chart-hsv"></canvas></div>
+            </div>
+            <div class="tab-panel" id="tab-normalize">
+              <div class="chart-container"><canvas id="chart-normalize"></canvas></div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SECTION: NORMALISASI GAMBAR ===== -->
+      <section class="section" id="sec-normalize">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-icon icon-indigo">📐</div>
+            <div class="section-title-group">
+              <h2>Normalisasi Gambar</h2>
+              <p>Min-Max Normalization: meregangkan rentang intensitas piksel ke [0, 255]</p>
+            </div>
+            <span class="poin-badge">Metode 7 (Tambahan)</span>
+          </div>
+          <div id="norm-placeholder" class="placeholder-msg"><span class="emoji">⬆️</span>Upload gambar terlebih dahulu
+          </div>
+          <div id="norm-content" class="hidden">
+
+            <!-- Mode Selector -->
+            <div class="norm-mode-bar">
+              <span class="control-label">🎛️ Mode Normalisasi</span>
+              <div class="norm-mode-btns">
+                <button class="norm-mode-btn active" id="norm-btn-gray" onclick="setNormMode('gray')">⬛
+                  Grayscale</button>
+                <button class="norm-mode-btn" id="norm-btn-rgb" onclick="setNormMode('rgb')">🎨 RGB Per-Channel</button>
+              </div>
+            </div>
+
+            <!-- Formula Info -->
+            <div id="norm-formula-box" class="norm-formula-box">
+              <div id="norm-formula-gray" class="norm-formula active">
+                <span class="norm-formula-label">Formula Grayscale:</span>
+                <code>Gray_norm = (Gray - min) / (max - min) × 255</code>
+              </div>
+              <div id="norm-formula-rgb" class="norm-formula hidden">
+                <span class="norm-formula-label">Formula RGB Per-Channel:</span>
+                <code>Ch_norm = (Ch - Ch_min) / (Ch_max - Ch_min) × 255</code>
+                <small style="color:var(--text-muted);margin-left:12px;">(R, G, B diproses secara independen)</small>
+              </div>
+            </div>
+
+            <!-- Hasil Gambar: Before vs After -->
+            <div class="norm-compare-grid">
+              <div class="norm-compare-item">
+                <div class="norm-compare-label">🖼️ Gambar Asli (Input)</div>
+                <div class="canvas-item">
+                  <div class="canvas-label"><span class="dot"></span>Original / Grayscale</div>
+                  <canvas id="canvas-norm-before"></canvas>
+                </div>
+              </div>
+              <div class="norm-compare-arrow">→</div>
+              <div class="norm-compare-item">
+                <div class="norm-compare-label">✨ Hasil Normalisasi (Output)</div>
+                <div class="canvas-item">
+                  <div class="canvas-label"><span class="dot" style="background:var(--success);"></span>Normalized Image
+                  </div>
+                  <canvas id="canvas-norm-after"></canvas>
+                  <div class="download-bar">
+                    <button class="download-btn" onclick="downloadCanvas('canvas-norm-after', 'image-normalized')"
+                      id="btn-dl-norm">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                      <span>Unduh PNG</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Statistik Perbandingan -->
+            <div class="norm-stats-wrap">
+              <div class="norm-stats-title">📊 Statistik Piksel</div>
+              <div class="norm-stats-grid">
+                <div class="norm-stat-card">
+                  <div class="norm-stat-header before">Sebelum Normalisasi</div>
+                  <table class="norm-stat-table">
+                    <tr>
+                      <td>Min</td>
+                      <td id="stat-before-min">—</td>
+                    </tr>
+                    <tr>
+                      <td>Max</td>
+                      <td id="stat-before-max">—</td>
+                    </tr>
+                    <tr>
+                      <td>Mean</td>
+                      <td id="stat-before-mean">—</td>
+                    </tr>
+                    <tr>
+                      <td>Std Dev</td>
+                      <td id="stat-before-std">—</td>
+                    </tr>
+                    <tr>
+                      <td>Rentang</td>
+                      <td id="stat-before-range">—</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="norm-stat-divider"></div>
+                <div class="norm-stat-card">
+                  <div class="norm-stat-header after">Sesudah Normalisasi</div>
+                  <table class="norm-stat-table">
+                    <tr>
+                      <td>Min</td>
+                      <td id="stat-after-min">—</td>
+                    </tr>
+                    <tr>
+                      <td>Max</td>
+                      <td id="stat-after-max">—</td>
+                    </tr>
+                    <tr>
+                      <td>Mean</td>
+                      <td id="stat-after-mean">—</td>
+                    </tr>
+                    <tr>
+                      <td>Std Dev</td>
+                      <td id="stat-after-std">—</td>
+                    </tr>
+                    <tr>
+                      <td>Rentang</td>
+                      <td id="stat-after-range">—</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Histogram Perbandingan Before vs After -->
+            <div class="norm-histogram-wrap">
+              <div class="norm-stats-title">📈 Histogram Perbandingan</div>
+              <div class="norm-chart-grid">
+                <div>
+                  <div class="norm-chart-subtitle before-lbl">Sebelum Normalisasi</div>
+                  <div class="chart-container"><canvas id="chart-norm-before"></canvas></div>
+                </div>
+                <div>
+                  <div class="norm-chart-subtitle after-lbl">Sesudah Normalisasi</div>
+                  <div class="chart-container"><canvas id="chart-norm-after"></canvas></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-conv">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-icon icon-pink">🔍</div>
+            <div class="section-title-group">
+              <h2>Konvolusi / Filtering</h2>
+              <p>Aplikasi berbagai kernel konvolusi 3×3 pada citra asli</p>
+            </div>
+            <span class="poin-badge">Metode 8 (Opsional)</span>
+          </div>
+          <div id="conv-placeholder" class="placeholder-msg"><span class="emoji">⬆️</span>Upload gambar terlebih dahulu
+          </div>
+          <div id="conv-content" class="hidden">
+            <div class="conv-grid" id="conv-grid"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="sec-morph">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-icon icon-teal">🔬</div>
+            <div class="section-title-group">
+              <h2>Operasi Morfologi</h2>
+              <p>Erosi &amp; Dilasi dengan 7 kernel berbeda (Kotak, Plus, Cross, dll.)</p>
+            </div>
+            <span class="poin-badge">Metode 9 (Bonus)</span>
+          </div>
+          <div id="morph-placeholder" class="placeholder-msg"><span class="emoji">⬆️</span>Upload gambar terlebih dahulu
+          </div>
+          <div id="morph-content" class="hidden">
+            <div id="morph-sections"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ===== DOWNLOAD ALL SECTION ===== -->
+  <section class="section visible" id="sec-download-all">
+    <div class="container">
+      <div class="download-all-card" id="download-all-card">
+        <div class="download-all-glow"></div>
+
+        <div class="download-all-icon">📦</div>
+
+        <div class="download-all-text">
+          <h2>Unduh Semua Hasil Konversi</h2>
+          <p>Kemas semua gambar yang telah diproses menjadi satu file <strong>.zip</strong> — siap diunduh sekaligus</p>
+        </div>
+
+        <div class="download-all-info" id="dl-all-info">
+          <span class="dl-all-badge" id="dl-all-count">—</span>
+          <span class="dl-all-badge-label">gambar tersedia</span>
+        </div>
+
+        <div class="download-all-progress" id="dl-all-progress-wrap">
+          <div class="dl-progress-bar" id="dl-progress-bar"></div>
+        </div>
+
+        <div class="download-all-actions">
+          <button class="download-all-btn" id="btn-download-all" onclick="downloadAllImages()" disabled>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            <span id="dl-all-btn-text">Upload gambar terlebih dahulu</span>
+          </button>
+        </div>
+
+        <div class="download-all-list" id="dl-all-list">
+          <!-- Diisi secara dinamis oleh JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>Tugas Praktikum Pengolahan Citra Digital &nbsp;·&nbsp; Ilmu Komputer Semester 4</p>
+      <p style="margin-top:6px;">
+        <span>MADE BY KELOMPOK ALPHA</span> &nbsp;·&nbsp;
+      </p>
+      <p style="margin-top:6px;">Institut Teknologi Bacharuddin Jusuf Habibie (ITH)</p>
+    </div>
+  </footer>
+
+  <!-- Toast notification for downloads -->
+  <div id="dl-toast">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+    <span id="dl-toast-msg">Gambar berhasil diunduh!</span>
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>
